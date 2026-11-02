@@ -1,0 +1,108 @@
+{
+  "project_info": {
+    "name": "Spend Better Free Time (Passa meglio il tempo libero)",
+    "app_type": "mobile_web_app / PWA",
+    "stack": "React (JS), Tailwind CSS, Lucide Icons, Leaflet Maps, FastAPI Backend",
+    "languages": ["it", "en", "fr", "es", "de", "zh", "ar", "pt"],
+    "default_language": "it",
+    "rtl_supported_languages": ["ar"]
+  },
+  "visual_identity": {
+    "theme_archetype": "Pastel & Soft with Vibrant Accent (Archetype 3 - Mobile-first Organic & Playful)",
+    "primary_pink": "#E83D84",
+    "primary_pink_hover": "#D02E70",
+    "pink_light": "#FDF2F8",
+    "pink_subtle": "#FCE7F3",
+    "accent_rose": "#F43F5E",
+    "background_light": "#FAF9F6",
+    "surface_card": "#FFFFFF",
+    "text_primary": "#0F172A",
+    "text_secondary": "#64748B",
+    "text_muted": "#94A3B8",
+    "border_color": "#E2E8F0",
+    "dark_mode": {
+      "background": "#0B0F17",
+      "surface_card": "#151C28",
+      "text_primary": "#F8FAFC",
+      "text_secondary": "#94A3B8",
+      "border_color": "#1E293B"
+    }
+  },
+  "typography": {
+    "heading_font": "Plus Jakarta Sans, sans-serif",
+    "body_font": "Outfit, sans-serif",
+    "hierarchy": {
+      "h1": "text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight",
+      "h2": "text-2xl sm:text-3xl font-bold tracking-tight",
+      "h3": "text-lg sm:text-xl font-semibold",
+      "h4": "text-base sm:text-lg font-medium",
+      "body": "text-sm sm:text-base leading-relaxed",
+      "caption": "text-xs text-slate-500 tracking-wide"
+    }
+  },
+  "layout_and_navigation": {
+    "pwa_features": "Standalone display mode, Manifest JSON, Service Worker for offline fallback, Add to Home Screen prompt banner",
+    "header": "Sticky Glassmorphic Header with Logo, Language Selector dropdown, Location Status badge, PWA Install button, Profile avatar link",
+    "bottom_navigation": "Mobile Floating Bottom Navigation Bar with active state pink highlight and indicators for Home, Map, Groups/Chat, AI Assistant, History/Favorites, Profile",
+    "responsive_breakpoints": "Mobile-first layout (< 640px bottom nav active, >= 768px expanded sidebar + top nav)"
+  },
+  "key_features_and_components": {
+    "authentication": "Email/Password login, Google Emergent OAuth, Password Reset modal/flow with email notification simulation",
+    "onboarding_flow": {
+      "step_1": "Personal details (Name, Age, Resident City, Gender)",
+      "step_2": "10-15 Hobbies selection with drag & drop reordering or step re-prioritization controls",
+      "step_3": "Facebook / Instagram groups interest tags & custom group links",
+      "step_4": "Optional geolocation permission consent with privacy note"
+    },
+    "home_feed": {
+      "header_controls": "Date and Time range selector + Current Weather card with temperature & icons",
+      "ai_suggestions": "AI Generated Activity Cards featuring category badge, estimated duration, weather suitability tag, distance/city, match score %, 'Add to Favorites' heart toggle, 'Mark Done' thumb button"
+    },
+    "map_view": "Interactive Leaflet Map with custom pink markers for activity suggestions, category filter pills, and popup cards",
+    "group_chat": "Group proposal chat room with activity voting polls, proposed time slots, and message threads",
+    "ai_assistant_chat": "Dedicated interactive AI leisure concierge for custom queries ('What can I do today at 4pm with 2 friends in Milan?')",
+    "history_and_feedback": "Completed activities list with thumbs up / thumbs down rating system affecting future AI rankings",
+    "donations_section": "PayPal button integration + Direct IBAN copy-to-clipboard widget with quick copy toast",
+    "privacy_policy": "Dedicated page at /api/privacy rendering compliant GDPR privacy guidelines"
+  },
+  "image_urls": [
+    {
+      "category": "hero_and_leisure",
+      "url": "https://images.unsplash.com/photo-1569617084133-26942bb441f2?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "description": "Group of friends having fun outdoors"
+    },
+    {
+      "category": "hiking_and_outdoor",
+      "url": "https://images.unsplash.com/photo-1691582583603-409757653634?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "description": "Friends hiking in nature"
+    },
+    {
+      "category": "beach_and_sunset",
+      "url": "https://images.unsplash.com/photo-1659882751445-a846ab85d6c6?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "description": "Group sitting at the beach sunset"
+    }
+  ],
+  "testing_requirements": {
+    "rule": "ALL interactive and key informational elements MUST have data-testid attributes",
+    "examples": [
+      "data-testid='login-email-input'",
+      "data-testid='login-submit-btn'",
+      "data-testid='onboarding-step-next-btn'",
+      "data-testid='hobby-priority-item-0'",
+      "data-testid='date-time-picker'",
+      "data-testid='activity-card-0'",
+      "data-testid='activity-like-btn-0'",
+      "data-testid='pwa-install-btn'",
+      "data-testid='language-switcher-select'",
+      "data-testid='ai-chat-input'",
+      "data-testid='paypal-donate-btn'"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Build the mobile responsive web application and PWA with manifest.json and service-worker.js.",
+    "Implement internationalization for 8 languages (it, en, fr, es, de, zh, ar, pt) with RTL support when 'ar' is selected.",
+    "Utilize vibrant pink accents (#E83D84) with soft rose tones and clean white/dark contrast surfaces.",
+    "Rely on existing FastAPI backend endpoints for auth, hobbies, suggestions, weather, and AI assistant.",
+    "Ensure every form control, button, card, and interactive element has explicit data-testid attributes."
+  ]
+}

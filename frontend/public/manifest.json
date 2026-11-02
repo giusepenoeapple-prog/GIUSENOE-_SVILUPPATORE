@@ -1,0 +1,16 @@
+{
+  "short_name": "Free Time",
+  "name": "Spend better free time",
+  "description": "AI-powered ideas for your free time",
+  "icons": [
+    { "src": "/icons/icon-192.png", "type": "image/png", "sizes": "192x192", "purpose": "any maskable" },
+    { "src": "/icons/icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "any maskable" }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#E83D84",
+  "background_color": "#FAF9F6",
+  "lang": "it"
+}
