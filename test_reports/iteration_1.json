@@ -1,0 +1,40 @@
+{
+  "summary": "Quick e2e test. Backend: 29/31 pytest pass (auth, profile/onboarding, weather, AI suggestions, favorites, history rating, groups/messages/votes, notifications, assistant SSE, photo upload + avatar GET, privacy 8 langs, PWA assets). Frontend: all requested flows pass - register->4-step onboarding (10 hobbies + reorder)->Home; demo login -> AI suggestions (6 cards) -> favorite + done -> Saved favorites/history + thumb up; Map renders 9 markers; group create/text/proposal/vote; second user joins via code and gets 'Nuova proposta' toast in ~9s; assistant streams reply; photo upload updates avatar (/api/avatar/..); language ar sets dir=rtl; Donate shows PayPal link (giuseppenoe@libero.it) + IBAN.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/login", "issue": "Brute-force lock not effective behind k8s ingress: key uses request.client.host (ingress pod IP varies per request), so after 5 bad logins the correct password still returns 200 instead of 429. Use X-Forwarded-For first IP (or lock by email only)."},
+      {"endpoint": "GET /api/privacy?lang=ar", "issue": "Arabic content returned but <html> lacks dir=\"rtl\" (privacy.py privacy_html). Add dir='rtl' when lang=='ar'."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Assistant", "issues": ["AI reply shows raw markdown (**bold**, '- ' lists) - render with react-markdown or strip"]},
+      {"screen": "Assistant / GroupChat headers", "issues": ["Page title ('Il tuo assistente IA', group name) is clipped/blurred under the sticky top bar"]},
+      {"screen": "Home", "issues": ["Uses native browser date/time inputs (shows US format 11/02/2026, 10:00 PM in Italian UI) instead of shadcn Calendar/locale-aware picker"]},
+      {"screen": "Saved history", "issues": ["Dates shown as 11/2/2026 (US style) in Italian locale - use toLocaleDateString(lang)"]},
+      {"screen": "Top bar", "issues": ["Demo user avatar in header renders as empty pink circle (no initials/image)"]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_sbft_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Fix brute-force key to use X-Forwarded-For client IP (auth.py ~line 88)",
+    "Add dir=rtl to Arabic privacy HTML",
+    "Render markdown in Assistant messages",
+    "Fix sticky header overlapping page titles on Assistant/GroupChat",
+    "Locale-aware date formatting / picker"
+  ],
+  "critical_code_review_comments": [
+    "vote-yes-btn-N / proposal-card-N index is the message index, not the proposal index (GroupChat.jsx idx={i}) - confusing for tests",
+    "Groups create does not navigate into the new group (stays on list) - fine, but note for UX"
+  ],
+  "updated_files": ["/app/backend/tests/test_sbft_api.py"],
+  "success_rate": {"backend": "94% (29/31)", "frontend": "100% of requested flows"},
+  "test_credentials": "demo@sbft.app / Demo1234! (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "Created users ui_*@example.com, ui2_15641@example.com / Test1234!, test_*@example.com; group 'TEST UI Group' (demo + ui2 member) with TEST proposals",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Google login skipped. Use [data-testid^=vote-yes-btn-] since index = message index. Notification toast arrives within 15s poll. Brute-force test fails due to ingress IP."
+}

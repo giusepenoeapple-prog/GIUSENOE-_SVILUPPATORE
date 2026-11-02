@@ -90,7 +90,7 @@ export default function GroupChat() {
   if (!group) return null;
   return (
     <div className="flex flex-col h-[calc(100vh-10rem)] md:h-[calc(100vh-7rem)]">
-      <div className="flex items-center gap-3 pb-4 border-b border-[var(--line)]">
+      <div className="flex items-center gap-3 pt-2 pb-4 border-b border-[var(--line)]">
         <Link to="/groups" className="p-2 -ms-2" data-testid="group-back-btn"><ArrowLeft className="h-5 w-5 rtl:rotate-180" /></Link>
         <div className="flex-1 min-w-0">
           <h1 className="font-display text-xl font-bold truncate" data-testid="group-name">{group.name}</h1>

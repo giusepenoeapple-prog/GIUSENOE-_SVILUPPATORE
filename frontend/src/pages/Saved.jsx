@@ -30,7 +30,7 @@ const FavoritesList = () => {
 };
 
 const HistoryList = () => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [items, setItems] = useState(null);
   useEffect(() => { api.get("/history").then((r) => setItems(r.data)).catch(() => setItems([])); }, []);
 
@@ -54,7 +54,7 @@ const HistoryList = () => {
       {items.map((h, i) => (
         <div key={h.history_id} className="card-soft p-4 sm:p-5 flex items-center gap-4 fade-up" data-testid={`history-item-${i}`}>
           <div className="min-w-0 flex-1">
-            <p className="text-xs text-slate-400">{new Date(h.date).toLocaleDateString()}</p>
+            <p className="text-xs text-slate-400">{new Date(h.date).toLocaleDateString(lang)}</p>
             <h3 className="font-display font-bold truncate">{h.activity.title}</h3>
             <p className="text-sm text-slate-500 truncate">{h.activity.place}</p>
           </div>

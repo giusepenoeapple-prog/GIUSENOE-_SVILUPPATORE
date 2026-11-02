@@ -208,3 +208,38 @@ def test_pwa_assets(path):
     assert r.status_code == 200
     ct = r.headers.get("content-type", "")
     assert "text/html" not in ct, f"{path} served as html (SPA fallback?)"
+
+
+# ---- Privacy all languages / notifications / photo upload (iteration 1 additions) ----
+@pytest.mark.parametrize("lang", ["fr", "es", "de", "zh", "ar", "pt"])
+def test_privacy_translated(lang):
+    r = requests.get(f"{API}/privacy", params={"lang": lang}, timeout=20)
+    it = requests.get(f"{API}/privacy", params={"lang": "it"}, timeout=20).text
+    assert r.status_code == 200 and r.text != it and f'lang="{lang}"' in r.text
+    if lang == "ar":
+        assert 'dir="rtl"' in r.text
+
+
+def test_notifications_proposal(demo_h, new_user):
+    since = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    g = requests.post(f"{API}/groups", headers=demo_h, json={"name": "TEST_notif"}, timeout=20).json()
+    requests.post(f"{API}/groups/join", headers=new_user["h"], json={"invite_code": g["invite_code"]}, timeout=20)
+    requests.post(f"{API}/groups/{g['group_id']}/messages", headers=demo_h, json={"proposal": {"title": "TEST_prop"}}, timeout=20)
+    n = requests.get(f"{API}/notifications", headers=new_user["h"], params={"since": since}, timeout=20).json()
+    assert any(x["title"] == "TEST_prop" and x["group_name"] == "TEST_notif" for x in n)
+    own = requests.get(f"{API}/notifications", headers=demo_h, params={"since": since}, timeout=20).json()
+    assert not any(x["title"] == "TEST_prop" for x in own)
+    requests.post(f"{API}/groups/{g['group_id']}/leave", headers=new_user["h"], timeout=20)
+    requests.post(f"{API}/groups/{g['group_id']}/leave", headers=demo_h, timeout=20)
+
+
+def test_photo_upload(new_user):
+    png = bytes.fromhex("89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d4944415478da63f8cfc0f01f0005000201a5f6a5a80000000049454e44ae426082")
+    r = requests.post(f"{API}/profile/photo", headers=new_user["h"], files={"file": ("a.png", png, "image/png")}, timeout=60)
+    assert r.status_code == 200, r.text
+    photo = r.json()["photo"]
+    assert photo.startswith("/api/avatar/") and r.json()["use_picture"] is True
+    g = requests.get(f"{BASE_URL}{photo}", timeout=30)
+    assert g.status_code == 200 and g.content == png
+    bad = requests.post(f"{API}/profile/photo", headers=new_user["h"], files={"file": ("a.txt", b"hi", "text/plain")}, timeout=20)
+    assert bad.status_code == 400

@@ -7,7 +7,7 @@ import { api, API_BASE, TOKEN_KEY } from "@/lib/api";
 const Bubble = ({ m, i }) => (
   <div className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`} data-testid={`ai-message-${i}`}>
     <div className={`max-w-[85%] rounded-3xl px-4 py-3 text-sm whitespace-pre-wrap leading-relaxed ${m.role === "user" ? "bg-[var(--pink)] text-white rounded-ee-md" : "bg-white border border-[var(--line)] rounded-es-md"}`}>
-      {m.content || <span className="inline-flex gap-1"><span className="h-2 w-2 rounded-full bg-[var(--pink)] animate-bounce" /><span className="h-2 w-2 rounded-full bg-[var(--pink)] animate-bounce [animation-delay:120ms]" /><span className="h-2 w-2 rounded-full bg-[var(--pink)] animate-bounce [animation-delay:240ms]" /></span>}
+      {m.content ? m.content.replace(/\*\*/g, "").replace(/^#+\s/gm, "") : <span className="inline-flex gap-1"><span className="h-2 w-2 rounded-full bg-[var(--pink)] animate-bounce" /><span className="h-2 w-2 rounded-full bg-[var(--pink)] animate-bounce [animation-delay:120ms]" /><span className="h-2 w-2 rounded-full bg-[var(--pink)] animate-bounce [animation-delay:240ms]" /></span>}
     </div>
   </div>
 );
@@ -68,7 +68,7 @@ export default function Assistant() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-10rem)] md:h-[calc(100vh-7rem)]">
-      <div className="flex items-center justify-between gap-3 pb-4">
+      <div className="flex items-center justify-between gap-3 pt-2 pb-4">
         <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight">{t("assistant_title")}</h1>
         {msgs.length > 0 && <button onClick={clear} className="chip inline-flex items-center gap-1.5 text-sm shrink-0" data-testid="ai-clear-btn"><RotateCcw className="h-4 w-4" />{t("clear_chat")}</button>}
       </div>

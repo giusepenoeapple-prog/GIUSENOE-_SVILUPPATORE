@@ -92,7 +92,7 @@ SECTIONS.update({
 def privacy_html(lang: str) -> str:
     title, updated, items = SECTIONS.get(lang, SECTIONS["en"])
     body = "".join(f"<h2>{escape(h)}</h2><p>{escape(p)}</p>" for h, p in items)
-    return f"""<!doctype html><html lang="{escape(lang)}"><head><meta charset="utf-8">
+    return f"""<!doctype html><html lang="{escape(lang)}" dir="{'rtl' if lang == 'ar' else 'ltr'}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>{escape(title)} – Spend better free time</title>
 <style>body{{font-family:Arial,sans-serif;max-width:760px;margin:0 auto;padding:32px 20px;color:#0F172A;background:#FAF9F6;line-height:1.6}}
 h1{{color:#E83D84}}h2{{font-size:1.05rem;margin-top:28px}}small{{color:#64748B}}</style></head>

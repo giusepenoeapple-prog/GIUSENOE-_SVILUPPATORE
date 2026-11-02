@@ -85,7 +85,7 @@ async def register(body: RegisterIn, response: Response):
 @router.post("/login")
 async def login(body: LoginIn, request: Request, response: Response):
     email = body.email.lower()
-    ip = request.client.host if request.client else "?"
+    ip = (request.headers.get("x-forwarded-for") or (request.client.host if request.client else "?")).split(",")[0].strip()
     key = f"{ip}:{email}"
     att = await db.login_attempts.find_one({"key": key}, {"_id": 0})
     if att and att.get("locked_until") and att["locked_until"] > now_utc().isoformat():

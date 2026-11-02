@@ -19,3 +19,7 @@ Web version (responsive + installable PWA) of "Spend better free time". React + 
 - P0: full E2E test (testing agent) of favorites, history, map, groups, assistant, profile, donate, reset email, Google login
 - P1: privacy policy only it/en (others fallback en); avatar = preset generated avatars (no photo upload)
 - P2: APP_URL in backend .env must match production domain for reset links; push notifications for group chat
+
+## Iteration 2 (2026-11-02)
+- Added: privacy in all 8 languages, profile photo upload (Emergent Object Storage), new-proposal alerts (toast + browser notification, polling 15s)
+- Testing agent iteration_1: backend 29/31, frontend 100%; fixed brute-force IP (X-Forwarded-For), privacy RTL, assistant markdown, header clipping, date locale
