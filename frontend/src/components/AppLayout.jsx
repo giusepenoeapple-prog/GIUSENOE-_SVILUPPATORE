@@ -6,6 +6,7 @@ import { avatarUrl } from "@/lib/api";
 import { Logo } from "./Logo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { InstallButton } from "./InstallButton";
+import { NotificationWatcher } from "./NotificationWatcher";
 
 const NAV = [
   { to: "/", key: "home", icon: Home, end: true },
@@ -32,6 +33,7 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen grain">
+      <NotificationWatcher />
       <aside className="hidden md:flex fixed inset-y-0 start-0 w-64 flex-col gap-1 border-e border-[var(--line)] bg-[var(--bg)] p-5 z-20">
         <div className="mb-8 px-2"><Logo /></div>
         {[...NAV, ...SIDE_EXTRA].map((i) => <SideLink key={i.to} item={i} t={t} />)}

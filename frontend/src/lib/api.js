@@ -20,6 +20,7 @@ export const errMsg = (e, t) => {
 
 export const avatarUrl = (user, style, seed) => {
   if (!user) return "";
+  if (!style && user.use_picture && user.photo) return `${BACKEND_URL}${user.photo}`;
   if (!style && user.use_picture && user.picture) return user.picture;
   const s = style || user.avatar_style || "adventurer";
   const sd = seed || user.avatar_seed || user.name;

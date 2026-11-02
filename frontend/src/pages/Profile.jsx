@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { LogOut, Shield, HandHeart, SlidersHorizontal, MapPin } from "lucide-react";
+import { Camera, LogOut, Shield, HandHeart, SlidersHorizontal, MapPin } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useI18n } from "@/i18n/I18nContext";
 import { useAuth } from "@/context/AuthContext";
@@ -14,6 +14,19 @@ const SEEDS = ["Luna", "Sole", "Mare"];
 
 const AvatarPicker = ({ user, save }) => {
   const { t } = useI18n();
+  const { setUser } = useAuth();
+  const upload = async (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (f.size > 5 * 1024 * 1024) return toast.error(t("image_too_large"));
+    const fd = new FormData();
+    fd.append("file", f);
+    try {
+      const { data } = await api.post("/profile/photo", fd);
+      setUser(data);
+      toast.success(t("saved_ok"));
+    } catch (er) { toast.error(errMsg(er, t)); }
+  };
   const opts = STYLES.flatMap((s) => SEEDS.map((sd) => ({ s, sd }))).slice(0, 12);
   return (
     <div className="space-y-3">
@@ -29,7 +42,13 @@ const AvatarPicker = ({ user, save }) => {
           );
         })}
       </div>
-      {user.picture && <button onClick={() => save({ use_picture: true })} className="chip text-sm" data-testid="use-google-photo-btn">{t("use_google_photo")}</button>}
+      <div className="flex flex-wrap gap-2">
+        <label className="chip text-sm inline-flex items-center gap-1.5 cursor-pointer" data-testid="upload-photo-btn">
+          <Camera className="h-4 w-4" />{t("upload_photo")}
+          <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" onChange={upload} data-testid="upload-photo-input" />
+        </label>
+        {user.picture && !user.photo && <button onClick={() => save({ use_picture: true })} className="chip text-sm" data-testid="use-google-photo-btn">{t("use_google_photo")}</button>}
+      </div>
     </div>
   );
 };

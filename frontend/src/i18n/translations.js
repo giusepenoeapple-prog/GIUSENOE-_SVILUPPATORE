@@ -10,6 +10,7 @@ export const LANGUAGES = [
 ];
 
 const it = {
+  upload_photo: "Carica foto", image_too_large: "Immagine troppo grande (max 5MB)", invalid_image: "Formato immagine non valido", new_proposal: "Nuova proposta",
   tagline: "Idee su misura per il tuo tempo libero, ogni giorno.",
   login: "Accedi", register: "Registrati", email: "Email", password: "Password", name: "Nome",
   forgot_password: "Password dimenticata?", send_reset_link: "Invia link di recupero",
@@ -52,6 +53,7 @@ const it = {
 };
 
 const en = {
+  upload_photo: "Upload photo", image_too_large: "Image too large (max 5MB)", invalid_image: "Invalid image format", new_proposal: "New proposal",
   tagline: "Tailored ideas for your free time, every day.",
   login: "Log in", register: "Sign up", email: "Email", password: "Password", name: "Name",
   forgot_password: "Forgot password?", send_reset_link: "Send reset link",
@@ -94,6 +96,7 @@ const en = {
 };
 
 const fr = {
+  upload_photo: "Importer une photo", image_too_large: "Image trop lourde (max 5 Mo)", invalid_image: "Format d'image invalide", new_proposal: "Nouvelle proposition",
   tagline: "Des idées sur mesure pour ton temps libre, chaque jour.",
   login: "Se connecter", register: "S'inscrire", email: "Email", password: "Mot de passe", name: "Nom",
   forgot_password: "Mot de passe oublié ?", send_reset_link: "Envoyer le lien",
@@ -136,6 +139,7 @@ const fr = {
 };
 
 const es = {
+  upload_photo: "Subir foto", image_too_large: "Imagen demasiado grande (máx. 5MB)", invalid_image: "Formato de imagen no válido", new_proposal: "Nueva propuesta",
   tagline: "Ideas a tu medida para tu tiempo libre, cada día.",
   login: "Iniciar sesión", register: "Registrarse", email: "Email", password: "Contraseña", name: "Nombre",
   forgot_password: "¿Olvidaste la contraseña?", send_reset_link: "Enviar enlace",
@@ -178,6 +182,7 @@ const es = {
 };
 
 const de = {
+  upload_photo: "Foto hochladen", image_too_large: "Bild zu groß (max. 5 MB)", invalid_image: "Ungültiges Bildformat", new_proposal: "Neuer Vorschlag",
   tagline: "Maßgeschneiderte Ideen für deine Freizeit, jeden Tag.",
   login: "Anmelden", register: "Registrieren", email: "E-Mail", password: "Passwort", name: "Name",
   forgot_password: "Passwort vergessen?", send_reset_link: "Link senden",
@@ -220,6 +225,7 @@ const de = {
 };
 
 const zh = {
+  upload_photo: "上传照片", image_too_large: "图片过大（最大 5MB）", invalid_image: "图片格式无效", new_proposal: "新提议",
   tagline: "每天为你的空闲时间量身定制灵感。",
   login: "登录", register: "注册", email: "邮箱", password: "密码", name: "姓名",
   forgot_password: "忘记密码？", send_reset_link: "发送重置链接",
@@ -262,6 +268,7 @@ const zh = {
 };
 
 const ar = {
+  upload_photo: "رفع صورة", image_too_large: "الصورة كبيرة جداً (الحد 5MB)", invalid_image: "صيغة الصورة غير صالحة", new_proposal: "اقتراح جديد",
   tagline: "أفكار مخصصة لوقت فراغك، كل يوم.",
   login: "تسجيل الدخول", register: "إنشاء حساب", email: "البريد الإلكتروني", password: "كلمة المرور", name: "الاسم",
   forgot_password: "نسيت كلمة المرور؟", send_reset_link: "إرسال رابط الاستعادة",
@@ -304,6 +311,7 @@ const ar = {
 };
 
 const pt = {
+  upload_photo: "Carregar foto", image_too_large: "Imagem demasiado grande (máx. 5MB)", invalid_image: "Formato de imagem inválido", new_proposal: "Nova proposta",
   tagline: "Ideias sob medida para o seu tempo livre, todos os dias.",
   login: "Entrar", register: "Registar", email: "Email", password: "Palavra-passe", name: "Nome",
   forgot_password: "Esqueceu a palavra-passe?", send_reset_link: "Enviar link",

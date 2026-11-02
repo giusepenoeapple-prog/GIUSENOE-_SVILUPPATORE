@@ -5,8 +5,12 @@ import random
 import string
 import logging
 from typing import List, Optional, Literal
-from fastapi import FastAPI, APIRouter, Depends, HTTPException
+import asyncio
+from fastapi import FastAPI, APIRouter, Depends, HTTPException, UploadFile, File, Response
 from fastapi.responses import HTMLResponse, StreamingResponse
+from storage import put_object, get_object, init_storage, APP_NAME
+
+IMAGE_TYPES = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif"}
 from starlette.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from emergentintegrations.llm.chat import UserMessage, TextDelta, StreamDone
@@ -354,6 +358,50 @@ async def assistant(body: AssistantIn, user=Depends(get_current_user)):
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 
+# ---------- Notifications ----------
+@api.get("/notifications")
+async def notifications(since: str, user=Depends(get_current_user)):
+    groups = await db.groups.find({"members": user["user_id"]}, {"_id": 0, "group_id": 1, "name": 1}).to_list(200)
+    names = {g["group_id"]: g["name"] for g in groups}
+    msgs = await db.messages.find({"group_id": {"$in": list(names)}, "type": "proposal", "user_id": {"$ne": user["user_id"]},
+                                   "created_at": {"$gt": since}}, {"_id": 0}).sort("created_at", 1).to_list(50)
+    return [{"message_id": m["message_id"], "group_id": m["group_id"], "group_name": names[m["group_id"]],
+             "user_name": m["user_name"], "title": m["proposal"]["title"], "created_at": m["created_at"]} for m in msgs]
+
+
+# ---------- Avatar upload ----------
+@api.post("/profile/photo")
+async def upload_photo(file: UploadFile = File(...), user=Depends(get_current_user)):
+    if file.content_type not in IMAGE_TYPES:
+        raise HTTPException(status_code=400, detail="invalid_image")
+    data = await file.read()
+    if len(data) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="image_too_large")
+    file_id = uuid.uuid4().hex
+    path = f"{APP_NAME}/avatars/{user['user_id']}/{file_id}.{IMAGE_TYPES[file.content_type]}"
+    try:
+        result = await asyncio.to_thread(put_object, path, data, file.content_type)
+    except Exception as e:
+        logger.error(f"upload failed: {e}")
+        raise HTTPException(status_code=502, detail="error_generic")
+    await db.files.insert_one({"file_id": file_id, "user_id": user["user_id"], "storage_path": result["path"],
+                               "content_type": file.content_type, "size": len(data), "is_deleted": False,
+                               "created_at": now_utc().isoformat()})
+    await db.users.update_one({"user_id": user["user_id"]},
+                              {"$set": {"photo": f"/api/avatar/{file_id}", "use_picture": True}})
+    doc = await db.users.find_one({"user_id": user["user_id"]}, USER_PROJECTION)
+    return clean(doc)
+
+
+@api.get("/avatar/{file_id}")
+async def get_avatar(file_id: str):
+    rec = await db.files.find_one({"file_id": file_id, "is_deleted": False}, {"_id": 0})
+    if not rec:
+        raise HTTPException(status_code=404, detail="not_found")
+    data, _ = await asyncio.to_thread(get_object, rec["storage_path"])
+    return Response(content=data, media_type=rec["content_type"], headers={"Cache-Control": "public, max-age=86400"})
+
+
 # ---------- Privacy ----------
 @api.get("/privacy", response_class=HTMLResponse)
 async def privacy(lang: str = "it"):
@@ -365,6 +413,14 @@ app.include_router(api)
 app.add_middleware(CORSMiddleware, allow_credentials=True,
                    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
                    allow_methods=["*"], allow_headers=["*"])
+
+
+@app.on_event("startup")
+async def startup_storage():
+    try:
+        await asyncio.to_thread(init_storage)
+    except Exception as e:
+        logger.error(f"Storage init failed: {e}")
 
 
 @app.on_event("shutdown")
